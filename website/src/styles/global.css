@@ -373,7 +373,8 @@ h3 {
 
 .hud-body {
   position: relative;
-  height: 230px;
+  height: 280px;
+  overflow: hidden;
   border-radius: 14px;
   margin-top: 18px;
   background:
@@ -385,8 +386,8 @@ h3 {
 
 .keystrokes {
   position: absolute;
-  top: 26px;
-  left: 26px;
+  top: 18px;
+  left: 18px;
   padding: 14px;
   border-radius: 14px;
   background: rgba(7, 13, 24, 0.9);
@@ -480,8 +481,8 @@ h3 {
 
 .mouse-keys {
   position: absolute;
-  top: 26px;
-  right: 26px;
+  top: 18px;
+  right: 18px;
   display: flex;
   gap: 8px;
   padding: 10px 12px;
@@ -513,10 +514,10 @@ h3 {
 
 .compass {
   position: absolute;
-  bottom: 26px;
+  bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
-  width: 320px;
+  width: min(320px, 62%);
   padding: 12px 14px 10px;
   border-radius: 14px;
   background: rgba(7, 13, 24, 0.9);
@@ -573,8 +574,8 @@ h3 {
 
 .cps {
   position: absolute;
-  bottom: 26px;
-  left: 26px;
+  top: 174px;
+  left: 18px;
   width: 150px;
   padding: 12px 14px;
   border-radius: 14px;
@@ -634,8 +635,8 @@ h3 {
 
 .waypoint-tag {
   position: absolute;
-  right: 26px;
-  bottom: 26px;
+  right: 18px;
+  bottom: 18px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -744,10 +745,18 @@ h3 {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 0;
   background: var(--grad-soft);
   opacity: 0;
   transition: opacity 0.22s ease;
   pointer-events: none;
+}
+
+.feature-icon,
+.feature-card h3,
+.feature-card p {
+  position: relative;
+  z-index: 1;
 }
 
 .feature-card:hover {
@@ -1026,6 +1035,22 @@ h3 {
 
 .footer-links a:hover {
   color: var(--cyan);
+}
+
+@media (max-width: 680px) {
+  .mouse-keys,
+  .waypoint-tag,
+  .cps {
+    display: none;
+  }
+
+  .compass {
+    width: min(320px, 72%);
+  }
+
+  .hud-body {
+    height: 240px;
+  }
 }
 
 /* ---------- Reveal animation ---------- */
