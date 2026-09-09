@@ -2,7 +2,8 @@
 
 A modern client-side HUD suite for Minecraft 1.21.8 (Fabric). Meridian brings an extensive, fully configurable heads-up display to your game: keystrokes, click tracking, ping, memory, server details, armor, a compass, waypoints and quick-chat macros.
 
-> **Website: [https://meridian-mod.vercel.app/](https://meridian-mod.vercel.app/)** — live landing page with full feature overview and download instructions.
+> **Website: [https://meridian-mod.vercel.app/](https://meridian-mod.vercel.app/)** — live landing page with full feature overview.
+> **Download: [https://meridian-mod.vercel.app/download](https://meridian-mod.vercel.app/download)** — dedicated page that always links the latest release jar from GitHub.
 
 ## Features
 
@@ -14,6 +15,7 @@ A modern client-side HUD suite for Minecraft 1.21.8 (Fabric). Meridian brings an
 - **Server Info** - name and address of the server you are connected to.
 - **Waypoints** - save, manage and render custom waypoints in the world, colored and fully editable.
 - **AutoText Macros** - bind preset chat messages to keys and send them instantly while in game.
+- **Backup & Transfer** - export your settings, waypoints and macros to `meridian-transfer.json` and import them on another computer.
 - **FPS counter**, **Armor Status** with durability bars and a **Direction Compass**.
 
 Every module can be toggled independently, rescaled, recolored, given a translucent background and repositioned by dragging it in the built-in HUD Layout Editor.

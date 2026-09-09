@@ -61,15 +61,61 @@ public final class Config {
     }
 
     public void save() {
+        saveTo(file);
+    }
+
+    public void saveTo(Path target) {
         try {
-            Files.createDirectories(file.getParent());
+            Files.createDirectories(target.getParent());
             Data data = new Data();
             data.modules = modules;
             data.waypoints = waypoints;
             data.macros = macros;
-            Files.writeString(file, GSON.toJson(data), StandardCharsets.UTF_8);
+            Files.writeString(target, GSON.toJson(data), StandardCharsets.UTF_8);
         } catch (IOException ignored) {
         }
+    }
+
+    public boolean loadFrom(Path source) {
+        if (!Files.exists(source)) {
+            return false;
+        }
+        try {
+            String json = Files.readString(source, StandardCharsets.UTF_8);
+            Data data = GSON.fromJson(json, Data.class);
+            if (data == null) {
+                return false;
+            }
+            modules.clear();
+            waypoints.clear();
+            macros.clear();
+            if (data.modules != null) {
+                modules.putAll(data.modules);
+            }
+            if (data.waypoints != null) {
+                waypoints.addAll(data.waypoints);
+            }
+            if (data.macros != null) {
+                macros.addAll(data.macros);
+            }
+            for (ModuleSettings fallback : ModuleRegistry.defaults()) {
+                modules.putIfAbsent(fallback.id, fallback);
+            }
+            save();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void reset() {
+        modules.clear();
+        waypoints.clear();
+        macros.clear();
+        for (ModuleSettings fallback : ModuleRegistry.defaults()) {
+            modules.put(fallback.id, fallback);
+        }
+        save();
     }
 
     public ModuleSettings module(String id) {

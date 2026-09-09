@@ -8,7 +8,7 @@ import java.net.URI;
 
 public class MeridianConfigScreen extends MeridianScreen {
 
-    private static final String VERSION = "1.2.0";
+    private static final String VERSION = "1.3.0";
     private static final String WEBSITE = "https://meridian-mod.vercel.app/";
 
     public MeridianConfigScreen() {
@@ -33,14 +33,15 @@ public class MeridianConfigScreen extends MeridianScreen {
 
         int innerWidth = panelWidth - 48;
         int y = 106;
-        int spacing = 30;
+        int spacing = 26;
         addMenu(y, innerWidth, centerX, "Modules & Appearance", () -> open(new ModulesScreen(this)));
         addMenu(y + spacing, innerWidth, centerX, "HUD Layout Editor", () -> open(new LayoutScreen(this)));
         addMenu(y + spacing * 2, innerWidth, centerX, "Waypoints", () -> open(new WaypointsScreen(this)));
         addMenu(y + spacing * 3, innerWidth, centerX, "AutoText Macros", () -> open(new MacrosScreen(this)));
-        addMenu(y + spacing * 4, innerWidth, centerX, "Visit Website", () -> openUrl(WEBSITE));
+        addMenu(y + spacing * 4, innerWidth, centerX, "Backup & Transfer", () -> open(new TransferScreen(this)));
+        addMenu(y + spacing * 5, innerWidth, centerX, "Visit Website", () -> openUrl(WEBSITE));
 
-        int hintY = y + spacing * 5;
+        int hintY = y + spacing * 6;
         addCenteredText(centerX, hintY, 0xFF7C8494, "Open this menu with Page Up");
         addCenteredText(centerX, hintY + 12, 0xFF5A6272, "Rebindable in Options > Controls > Key Binds");
 
