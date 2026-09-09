@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "meridian",
+  "version": "${version}",
+  "name": "Meridian",
+  "description": "A modern client-side HUD suite with keystrokes, CPS, ping, RAM, server info, waypoints, macros, armor status, compass and more.",
+  "authors": [
+    "Leo Galli"
+  ],
+  "license": "MIT",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.meridian.MeridianClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}

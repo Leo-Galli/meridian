@@ -1,0 +1,35 @@
+# Gradle
+.gradle/
+build/
+out/
+classes/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+bin/
+.classpath
+.project
+
+# Fabric / Minecraft
+run/
+
+# Java
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr
+
+# Freebuff workspace
+.freebuff/
+
+# macOS
+*.DS_Store
+
+# Generated jars
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
