@@ -23,7 +23,7 @@ public class MeridianClient implements ClientModInitializer {
     private static final KeyBinding OPEN_MENU = new KeyBinding(
             "key.meridian.openMenu",
             InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_RIGHT_SHIFT,
+            GLFW.GLFW_KEY_PAGE_UP,
             KeyBinding.MISC_CATEGORY
     );
 

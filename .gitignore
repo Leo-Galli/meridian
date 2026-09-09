@@ -33,3 +33,9 @@ replay_*.log
 # Generated jars
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
+
+# Website (Astro)
+website/node_modules/
+website/dist/
+website/.astro/
+.vercel/

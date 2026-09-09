@@ -2,10 +2,14 @@ package dev.meridian.gui;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.Util;
+
+import java.net.URI;
 
 public class MeridianConfigScreen extends MeridianScreen {
 
-    private static final String VERSION = "1.1.0";
+    private static final String VERSION = "1.2.0";
+    private static final String WEBSITE = "https://meridian-mod.vercel.app/";
 
     public MeridianConfigScreen() {
         super("Meridian");
@@ -34,12 +38,17 @@ public class MeridianConfigScreen extends MeridianScreen {
         addMenu(y + spacing, innerWidth, centerX, "HUD Layout Editor", () -> open(new LayoutScreen(this)));
         addMenu(y + spacing * 2, innerWidth, centerX, "Waypoints", () -> open(new WaypointsScreen(this)));
         addMenu(y + spacing * 3, innerWidth, centerX, "AutoText Macros", () -> open(new MacrosScreen(this)));
+        addMenu(y + spacing * 4, innerWidth, centerX, "Visit Website", () -> openUrl(WEBSITE));
 
-        int hintY = y + spacing * 4;
-        addCenteredText(centerX, hintY, 0xFF7C8494, "Open this menu with Right Shift");
+        int hintY = y + spacing * 5;
+        addCenteredText(centerX, hintY, 0xFF7C8494, "Open this menu with Page Up");
         addCenteredText(centerX, hintY + 12, 0xFF5A6272, "Rebindable in Options > Controls > Key Binds");
 
         addButton(centerX - 60, height - 38, 120, 20, "Close Menu", () -> goBack());
+    }
+
+    private static void openUrl(String url) {
+        Util.getOperatingSystem().open(URI.create(url));
     }
 
     private void addMenu(int y, int innerWidth, int centerX, String label, Runnable action) {
