@@ -5,7 +5,7 @@ import java.util.Deque;
 
 import org.lwjgl.glfw.GLFW;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.MinecraftClient;
 
 public final class ClickSampler {
 
@@ -19,7 +19,7 @@ public final class ClickSampler {
     private long lastRight;
 
     public void poll() {
-        Minecraft mc = Minecraft.getInstance();
+        MinecraftClient mc = MinecraftClient.getInstance();
         long now = System.currentTimeMillis();
         boolean l = isButtonDown(mc, GLFW.GLFW_MOUSE_BUTTON_LEFT);
         boolean r = isButtonDown(mc, GLFW.GLFW_MOUSE_BUTTON_RIGHT);
@@ -37,11 +37,11 @@ public final class ClickSampler {
         trim(right, now);
     }
 
-    private static boolean isButtonDown(Minecraft mc, int button) {
+    private static boolean isButtonDown(MinecraftClient mc, int button) {
         if (mc.getWindow() == null) {
             return false;
         }
-        return GLFW.glfwGetMouseButton(mc.getWindow().handle(), button) == GLFW.GLFW_PRESS;
+        return GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), button) == GLFW.GLFW_PRESS;
     }
 
     private static void trim(Deque<Long> deque, long now) {

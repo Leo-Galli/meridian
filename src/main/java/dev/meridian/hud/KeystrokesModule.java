@@ -1,8 +1,8 @@
 package dev.meridian.hud;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 
 import dev.meridian.config.ModuleSettings;
 
@@ -23,25 +23,25 @@ public class KeystrokesModule extends HudModule {
     }
 
     @Override
-    protected int contentWidth(Font font) {
+    protected int contentWidth(TextRenderer font) {
         return 70;
     }
 
     @Override
-    protected int contentHeight(Font font) {
+    protected int contentHeight(TextRenderer font) {
         return 86;
     }
 
     @Override
-    protected void renderContent(GuiGraphicsExtractor gfx, Font font, float deltaTicks) {
-        Minecraft mc = Minecraft.getInstance();
+    protected void renderContent(DrawContext gfx, TextRenderer font, float deltaTicks) {
+        MinecraftClient mc = MinecraftClient.getInstance();
         ClickSampler sampler = HudRenderer.INSTANCE.clickSamplerAccess();
         boolean[] states = {
-                mc.options.keyUp.isDown(),
-                mc.options.keyLeft.isDown(),
-                mc.options.keyDown.isDown(),
-                mc.options.keyRight.isDown(),
-                mc.options.keyJump.isDown(),
+                mc.options.forwardKey.isPressed(),
+                mc.options.leftKey.isPressed(),
+                mc.options.backKey.isPressed(),
+                mc.options.rightKey.isPressed(),
+                mc.options.jumpKey.isPressed(),
                 sampler.leftDown(),
                 sampler.rightDown()
         };
@@ -57,7 +57,7 @@ public class KeystrokesModule extends HudModule {
         }
     }
 
-    private void drawKey(GuiGraphicsExtractor gfx, Font font, int x, int y, int w, int h, String label, boolean down, float flash) {
+    private void drawKey(DrawContext gfx, TextRenderer font, int x, int y, int w, int h, String label, boolean down, float flash) {
         gfx.fill(x, y, x + w, y + h, 0x55000000);
         if (down) {
             gfx.fill(x, y, x + w, y + h, settings.accentColor);
@@ -70,7 +70,7 @@ public class KeystrokesModule extends HudModule {
         gfx.fill(x + w - 1, y, x + w, y + h, 0x44000000);
         gfx.fill(x, y + h - 1, x + w, y + h, 0x44000000);
         int color = down ? 0xFF0B0E12 : settings.textColor;
-        int labelWidth = font.width(label);
-        gfx.text(font, label, x + (w - labelWidth) / 2, y + (h - font.lineHeight) / 2 + 1, color, down ? false : settings.textShadow);
+        int labelWidth = font.getWidth(label);
+        gfx.drawText(font, label, x + (w - labelWidth) / 2, y + (h - font.fontHeight) / 2 + 1, color, down ? false : settings.textShadow);
     }
 }

@@ -2,7 +2,8 @@ package dev.meridian.gui;
 
 import java.util.List;
 
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 
 import dev.meridian.config.Config;
 import dev.meridian.config.ModuleRegistry;
@@ -52,16 +53,16 @@ public class ModulesScreen extends MeridianScreen {
         int buttonWidth = 108;
         int buttonX = x + rowWidth - buttonWidth;
         addButton(buttonX, y - 1, buttonWidth, 20, "Customize", () -> open(new ModuleSettingsScreen(this, id)));
-        int infoX = x + 24 + Math.min(font.width(ModuleRegistry.title(id)), 220) + 14;
+        int infoX = x + 24 + Math.min(textRenderer.getWidth(ModuleRegistry.title(id)), 220) + 14;
         String description = ModuleRegistry.description(id);
         int available = buttonX - infoX - 12;
         if (available > 60) {
-            String clipped = font.plainSubstrByWidth(description, available);
+            String clipped = textRenderer.trimToWidth(description, available);
             addText(infoX, y + 2, 0xFF7C8494, clipped);
         }
     }
 
     private static void open(Screen screen) {
-        net.minecraft.client.Minecraft.getInstance().gui.setScreen(screen);
+        MinecraftClient.getInstance().setScreen(screen);
     }
 }

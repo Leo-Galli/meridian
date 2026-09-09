@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.lwjgl.glfw.GLFW;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
 
 import dev.meridian.config.Config;
 import dev.meridian.config.Macro;
@@ -20,19 +20,19 @@ public final class MacroEngine {
     private MacroEngine() {
     }
 
-    public void tick(Minecraft mc) {
+    public void tick(MinecraftClient mc) {
         if (mc.getWindow() == null) {
             return;
         }
-        if (mc.level == null || mc.player == null) {
+        if (mc.world == null || mc.player == null) {
             pressed.clear();
             return;
         }
-        if (mc.gui.screen() != null) {
+        if (mc.currentScreen != null) {
             pressed.clear();
             return;
         }
-        long window = mc.getWindow().handle();
+        long window = mc.getWindow().getHandle();
         for (Macro macro : Config.INSTANCE.macros()) {
             if (!macro.enabled || macro.key <= 0 || macro.message == null || macro.message.isEmpty()) {
                 continue;
@@ -46,15 +46,15 @@ public final class MacroEngine {
         }
     }
 
-    private static void send(Minecraft mc, String message) {
-        ClientPacketListener connection = mc.getConnection();
+    private static void send(MinecraftClient mc, String message) {
+        ClientPlayNetworkHandler connection = mc.getNetworkHandler();
         if (connection == null) {
             return;
         }
         if (message.startsWith("/")) {
-            connection.sendCommand(message.substring(1));
+            connection.sendChatCommand(message.substring(1));
         } else {
-            connection.sendChat(message);
+            connection.sendChatMessage(message);
         }
     }
 }

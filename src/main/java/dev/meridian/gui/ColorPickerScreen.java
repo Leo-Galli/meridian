@@ -2,7 +2,7 @@ package dev.meridian.gui;
 
 import java.util.function.IntConsumer;
 
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screen.Screen;
 
 import dev.meridian.util.Palette;
 

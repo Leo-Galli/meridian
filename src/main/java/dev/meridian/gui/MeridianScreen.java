@@ -1,12 +1,12 @@
 package dev.meridian.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Checkbox;
-import net.minecraft.client.gui.components.Renderable;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.CheckboxWidget;
+import net.minecraft.text.Text;
 
 public abstract class MeridianScreen extends Screen {
 
@@ -17,34 +17,34 @@ public abstract class MeridianScreen extends Screen {
     }
 
     protected MeridianScreen(String title, Screen parent) {
-        super(Component.literal(title));
+        super(Text.literal(title));
         this.parent = parent;
     }
 
     protected void goBack() {
-        Minecraft.getInstance().gui.setScreen(parent);
+        MinecraftClient.getInstance().setScreen(parent);
     }
 
     @Override
-    public void onClose() {
+    public void close() {
         goBack();
     }
 
     @Override
-    public boolean isPauseScreen() {
+    public boolean shouldPause() {
         return false;
     }
 
     protected void clearAndRebuild() {
-        clearWidgets();
+        clearChildren();
         init();
     }
 
     protected void addScrim() {
-        addRenderableOnly((gfx, mouseX, mouseY, delta) -> {
+        addDrawable((gfx, mouseX, mouseY, delta) -> {
             gfx.fill(0, 0, width, height, 0xC0050A12);
-            gfx.horizontalLine(0, width, 0, 0xFF223040);
-            gfx.horizontalLine(0, width, height - 1, 0xFF223040);
+            gfx.drawHorizontalLine(0, width, 0, 0xFF223040);
+            gfx.drawHorizontalLine(0, width, height - 1, 0xFF223040);
         });
     }
 
@@ -53,22 +53,22 @@ public abstract class MeridianScreen extends Screen {
     }
 
     protected void addCenteredText(int centerX, int y, int color, String text) {
-        int w = font.width(text);
+        int w = textRenderer.getWidth(text);
         addText(centerX - w / 2, y, color, text);
     }
 
     protected void addText(int x, int y, int color, String text) {
-        addRenderableOnly((gfx, mouseX, mouseY, delta) ->
-                gfx.text(font, text, x, y, color, true));
+        addDrawable((gfx, mouseX, mouseY, delta) ->
+                gfx.drawText(textRenderer, text, x, y, color, true));
     }
 
     protected void addText(int x, int y, int color, String text, boolean shadow) {
-        addRenderableOnly((gfx, mouseX, mouseY, delta) ->
-                gfx.text(font, text, x, y, color, shadow));
+        addDrawable((gfx, mouseX, mouseY, delta) ->
+                gfx.drawText(textRenderer, text, x, y, color, shadow));
     }
 
     protected void addPanel(int x, int y, int w, int h) {
-        addRenderableOnly((gfx, mouseX, mouseY, delta) -> {
+        addDrawable((gfx, mouseX, mouseY, delta) -> {
             gfx.fill(x, y, x + w, y + h, 0x99070B11);
             gfx.fill(x, y, x + w, y + 1, 0x2E3A4A66);
             gfx.fill(x, y + h - 1, x + w, y + h, 0x66000000);
@@ -77,31 +77,31 @@ public abstract class MeridianScreen extends Screen {
         });
     }
 
-    protected Button addButton(int x, int y, int w, int h, String label, Button.OnPress onPress) {
-        Button button = Button.builder(Component.literal(label), onPress)
-                .bounds(x, y, w, h)
+    protected ButtonWidget addButton(int x, int y, int w, int h, String label, ButtonWidget.PressAction onPress) {
+        ButtonWidget button = ButtonWidget.builder(Text.literal(label), onPress)
+                .dimensions(x, y, w, h)
                 .build();
-        return addRenderableWidget(button);
+        return addDrawableChild(button);
     }
 
-    protected Button addButton(int x, int y, int w, int h, String label, Runnable action) {
+    protected ButtonWidget addButton(int x, int y, int w, int h, String label, Runnable action) {
         return addButton(x, y, w, h, label, button -> action.run());
     }
 
-    protected Checkbox addCheckbox(int x, int y, String label, boolean selected, Checkbox.OnValueChange onChange) {
-        Checkbox checkbox = Checkbox.builder(Component.literal(label), font)
+    protected CheckboxWidget addCheckbox(int x, int y, String label, boolean selected, CheckboxWidget.Callback onChange) {
+        CheckboxWidget checkbox = CheckboxWidget.builder(Text.literal(label), textRenderer)
                 .pos(x, y)
-                .selected(selected)
-                .onValueChange(onChange)
+                .checked(selected)
+                .callback(onChange)
                 .build();
-        return addRenderableWidget(checkbox);
+        return addDrawableChild(checkbox);
     }
 
-    protected static Renderable noOpRenderable() {
+    protected static Drawable noOpRenderable() {
         return (gfx, mouseX, mouseY, delta) -> {
         };
     }
 
-    protected void background(GuiGraphicsExtractor gfx) {
+    protected void background(DrawContext gfx) {
     }
 }

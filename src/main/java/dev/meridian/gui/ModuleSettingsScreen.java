@@ -3,13 +3,12 @@ package dev.meridian.gui;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.IntConsumer;
-import java.util.function.Supplier;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 
 import dev.meridian.config.Config;
 import dev.meridian.config.ModuleRegistry;
@@ -55,13 +54,13 @@ public class ModuleSettingsScreen extends MeridianScreen {
         addText(leftX, y + 2, 0xFFFFFFFF, "Module enabled");
         y += rowH;
 
-        Button scale = buildButton(controlX, y, controlWidth, 20, "Scale: " + percent(settings.scale),
+        ButtonWidget scale = buildButton(controlX, y, controlWidth, 20, "Scale: " + percent(settings.scale),
                 button -> {
                     settings.scale = next(SCALES, settings.scale, 1.0f);
                     Config.INSTANCE.save();
-                    button.setMessage(Component.literal("Scale: " + percent(settings.scale)));
+                    button.setMessage(Text.literal("Scale: " + percent(settings.scale)));
                 });
-        addRenderableWidget(scale);
+        addDrawableChild(scale);
         addText(leftX, y + 2, 0xFFFFFFFF, "Text scale");
         y += rowH;
 
@@ -72,47 +71,47 @@ public class ModuleSettingsScreen extends MeridianScreen {
         addText(leftX, y + 2, 0xFFFFFFFF, "Draw background box");
         y += rowH;
 
-        Button opacity = buildButton(controlX, y, controlWidth, 20, "Opacity: " + opacityLabel(settings.backgroundOpacity),
+        ButtonWidget opacity = buildButton(controlX, y, controlWidth, 20, "Opacity: " + opacityLabel(settings.backgroundOpacity),
                 button -> {
                     settings.backgroundOpacity = next(OPACITIES, settings.backgroundOpacity, 110);
                     Config.INSTANCE.save();
-                    button.setMessage(Component.literal("Opacity: " + opacityLabel(settings.backgroundOpacity)));
+                    button.setMessage(Text.literal("Opacity: " + opacityLabel(settings.backgroundOpacity)));
                 });
-        addRenderableWidget(opacity);
+        addDrawableChild(opacity);
         addText(leftX, y + 2, 0xFFFFFFFF, "Background opacity");
         y += rowH;
 
-        Button shadow = buildButton(controlX, y, controlWidth, 20, "Text shadow: " + onOff(settings.textShadow),
+        ButtonWidget shadow = buildButton(controlX, y, controlWidth, 20, "Text shadow: " + onOff(settings.textShadow),
                 button -> {
                     settings.textShadow = !settings.textShadow;
                     Config.INSTANCE.save();
-                    button.setMessage(Component.literal("Text shadow: " + onOff(settings.textShadow)));
+                    button.setMessage(Text.literal("Text shadow: " + onOff(settings.textShadow)));
                 });
-        addRenderableWidget(shadow);
+        addDrawableChild(shadow);
         addText(leftX, y + 2, 0xFFFFFFFF, "Text shadow");
         y += rowH;
 
         int finalTextColor = settings.textColor;
-        Button textColor = buildButton(controlX, y, controlWidth, 20, "Text Color: " + Palette.name(Palette.indexOf(finalTextColor)),
+        ButtonWidget textColor = buildButton(controlX, y, controlWidth, 20, "Text Color: " + Palette.name(Palette.indexOf(finalTextColor)),
                 button -> openColorPicker("Text Color", finalTextColor, color -> {
                     settings.textColor = color;
                     Config.INSTANCE.save();
-                    button.setMessage(Component.literal("Text Color: " + Palette.name(Palette.indexOf(color))));
+                    button.setMessage(Text.literal("Text Color: " + Palette.name(Palette.indexOf(color))));
                 }));
-        textColor.setTooltip(Tooltip.create(Component.literal("Custom color for the module text")));
-        addRenderableWidget(textColor);
+        textColor.setTooltip(Tooltip.of(Text.literal("Custom color for the module text")));
+        addDrawableChild(textColor);
         addText(leftX, y + 2, 0xFFFFFFFF, "Text color");
         y += rowH;
 
         int finalAccent = settings.accentColor;
-        Button accentColor = buildButton(controlX, y, controlWidth, 20, "Accent Color: " + Palette.name(Palette.indexOf(finalAccent)),
+        ButtonWidget accentColor = buildButton(controlX, y, controlWidth, 20, "Accent Color: " + Palette.name(Palette.indexOf(finalAccent)),
                 button -> openColorPicker("Accent Color", finalAccent, color -> {
                     settings.accentColor = color;
                     Config.INSTANCE.save();
-                    button.setMessage(Component.literal("Accent Color: " + Palette.name(Palette.indexOf(color))));
+                    button.setMessage(Text.literal("Accent Color: " + Palette.name(Palette.indexOf(color))));
                 }));
-        accentColor.setTooltip(Tooltip.create(Component.literal("Custom color for values and highlights")));
-        addRenderableWidget(accentColor);
+        accentColor.setTooltip(Tooltip.of(Text.literal("Custom color for values and highlights")));
+        addDrawableChild(accentColor);
         addText(leftX, y + 2, 0xFFFFFFFF, "Accent color");
         y += rowH;
 
@@ -129,11 +128,11 @@ public class ModuleSettingsScreen extends MeridianScreen {
     }
 
     private void openColorPicker(String title, int color, IntConsumer onChange) {
-        Minecraft.getInstance().gui.setScreen(new ColorPickerScreen(this, title, color, onChange));
+        MinecraftClient.getInstance().setScreen(new ColorPickerScreen(this, title, color, onChange));
     }
 
-    private Button buildButton(int x, int y, int w, int h, String label, Button.OnPress onPress) {
-        return Button.builder(Component.literal(label), onPress).bounds(x, y, w, h).build();
+    private ButtonWidget buildButton(int x, int y, int w, int h, String label, ButtonWidget.PressAction onPress) {
+        return ButtonWidget.builder(Text.literal(label), onPress).dimensions(x, y, w, h).build();
     }
 
     private static String percent(float scale) {

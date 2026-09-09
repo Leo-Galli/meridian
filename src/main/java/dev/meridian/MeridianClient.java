@@ -1,53 +1,57 @@
 package dev.meridian;
 
-import com.mojang.blaze3d.platform.InputConstants;
-
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.Identifier;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.util.InputUtil;
 
 import org.lwjgl.glfw.GLFW;
 
 import dev.meridian.config.Config;
 import dev.meridian.gui.MeridianConfigScreen;
+import dev.meridian.hud.HudRenderer;
 import dev.meridian.hud.MacroEngine;
-import dev.meridian.hud.MeridianHudElement;
 
 public class MeridianClient implements ClientModInitializer {
 
     public static final String MOD_ID = "meridian";
 
-    private static final KeyMapping OPEN_MENU = new KeyMapping(
+    private static final KeyBinding OPEN_MENU = new KeyBinding(
             "key.meridian.openMenu",
-            InputConstants.Type.KEYSYM,
+            InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_RIGHT_SHIFT,
-            KeyMapping.Category.MISC
+            KeyBinding.MISC_CATEGORY
     );
 
     @Override
     public void onInitializeClient() {
         Config.INSTANCE.load();
-        HudElementRegistry.addLast(Identifier.fromNamespaceAndPath(MOD_ID, "main_hud"), new MeridianHudElement());
-        KeyMappingHelper.registerKeyMapping(OPEN_MENU);
+        HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
+            MinecraftClient mc = MinecraftClient.getInstance();
+            if (mc.player == null || mc.world == null) {
+                return;
+            }
+            HudRenderer.INSTANCE.render(drawContext, mc.textRenderer, tickCounter);
+        });
+        KeyBindingHelper.registerKeyBinding(OPEN_MENU);
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndTick);
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> Config.INSTANCE.save());
     }
 
-    private void onEndTick(Minecraft client) {
+    private void onEndTick(MinecraftClient client) {
         MacroEngine.INSTANCE.tick(client);
-        while (OPEN_MENU.consumeClick()) {
+        while (OPEN_MENU.wasPressed()) {
             openMenu(client);
         }
     }
 
-    private static void openMenu(Minecraft client) {
-        if (client.gui.screen() == null) {
-            client.gui.setScreen(new MeridianConfigScreen());
+    private static void openMenu(MinecraftClient client) {
+        if (client.currentScreen == null) {
+            client.setScreen(new MeridianConfigScreen());
         }
     }
 }

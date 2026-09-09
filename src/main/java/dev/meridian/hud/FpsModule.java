@@ -1,8 +1,8 @@
 package dev.meridian.hud;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 
 import dev.meridian.config.ModuleSettings;
 
@@ -13,18 +13,18 @@ public class FpsModule extends HudModule {
     }
 
     @Override
-    protected int contentWidth(Font font) {
+    protected int contentWidth(TextRenderer font) {
         return pairWidth(font, "FPS ", "000");
     }
 
     @Override
-    protected int contentHeight(Font font) {
-        return font.lineHeight;
+    protected int contentHeight(TextRenderer font) {
+        return font.fontHeight;
     }
 
     @Override
-    protected void renderContent(GuiGraphicsExtractor gfx, Font font, float deltaTicks) {
-        String value = String.valueOf(Minecraft.getInstance().getFps());
+    protected void renderContent(DrawContext gfx, TextRenderer font, float deltaTicks) {
+        String value = String.valueOf(MinecraftClient.getInstance().getCurrentFps());
         drawPair(gfx, font, "FPS ", value, 0, 0);
     }
 }

@@ -1,7 +1,7 @@
 package dev.meridian.hud;
 
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 
 import dev.meridian.config.ModuleSettings;
 
@@ -15,17 +15,17 @@ public class RamModule extends HudModule {
     }
 
     @Override
-    protected int contentWidth(Font font) {
+    protected int contentWidth(TextRenderer font) {
         return Math.max(pairWidth(font, "Memory ", "0000/0000MB"), BAR_WIDTH);
     }
 
     @Override
-    protected int contentHeight(Font font) {
-        return font.lineHeight + 5;
+    protected int contentHeight(TextRenderer font) {
+        return font.fontHeight + 5;
     }
 
     @Override
-    protected void renderContent(GuiGraphicsExtractor gfx, Font font, float deltaTicks) {
+    protected void renderContent(DrawContext gfx, TextRenderer font, float deltaTicks) {
         Runtime runtime = Runtime.getRuntime();
         long used = runtime.totalMemory() - runtime.freeMemory();
         long max = runtime.maxMemory();
@@ -35,6 +35,6 @@ public class RamModule extends HudModule {
         int percent = Math.round(fraction * 100);
         String value = usedMb + "/" + maxMb + "MB (" + percent + "%)";
         drawPair(gfx, font, "Memory ", value, 0, 0);
-        drawBar(gfx, 0, font.lineHeight + 2, BAR_WIDTH, BAR_HEIGHT, fraction, settings.accentColor);
+        drawBar(gfx, 0, font.fontHeight + 2, BAR_WIDTH, BAR_HEIGHT, fraction, settings.accentColor);
     }
 }

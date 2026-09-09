@@ -1,6 +1,6 @@
 # Meridian
 
-A modern client-side HUD suite for Minecraft 26.2 (Fabric). Meridian brings an extensive, fully configurable heads-up display to your game: keystrokes, click tracking, ping, memory, server details, armor, a compass, waypoints and quick-chat macros.
+A modern client-side HUD suite for Minecraft 1.21.8 (Fabric). Meridian brings an extensive, fully configurable heads-up display to your game: keystrokes, click tracking, ping, memory, server details, armor, a compass, waypoints and quick-chat macros.
 
 ## Features
 
@@ -18,14 +18,14 @@ Every module can be toggled independently, rescaled, recolored, given a transluc
 
 ## Requirements
 
-- Minecraft 26.2
-- Fabric Loader 0.19.5 or newer
-- Fabric API 0.160.0 or newer
-- Java 25
+- Minecraft 1.21.8
+- Fabric Loader 0.16.13 or newer
+- Fabric API 0.136.1 or newer
+- Java 21 or newer
 
 ## Installation
 
-1. Install the Fabric Loader for Minecraft 26.2.
+1. Install the Fabric Loader for Minecraft 1.21.8.
 2. Drop `fabric-api` and `meridian.jar` into your `mods` folder.
 3. Launch the game, press **Right Shift** (or your custom binding) to open the Meridian menu.
 
@@ -35,7 +35,7 @@ Every module can be toggled independently, rescaled, recolored, given a transluc
 ./gradlew build
 ```
 
-The resulting jar is written to `build/libs/meridian-<version>.jar`.
+The resulting jar is written to `build/libs/meridian.jar`.
 
 ## License
 

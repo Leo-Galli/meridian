@@ -2,11 +2,10 @@ package dev.meridian.gui;
 
 import org.lwjgl.glfw.GLFW;
 
-import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.text.Text;
 
 import dev.meridian.config.Config;
 import dev.meridian.config.Macro;
@@ -15,9 +14,9 @@ import dev.meridian.util.KeyNames;
 public class MacroEditScreen extends MeridianScreen {
 
     private final int index;
-    private EditBox nameBox;
-    private EditBox messageBox;
-    private Button keyButton;
+    private TextFieldWidget nameBox;
+    private TextFieldWidget messageBox;
+    private ButtonWidget keyButton;
     private int key;
     private boolean capturing;
     private String error;
@@ -50,16 +49,16 @@ public class MacroEditScreen extends MeridianScreen {
         int y = panelY + 16;
 
         addText(labelX, y + 4, 0xFFFFFFFF, "Name");
-        nameBox = new EditBox(font, fieldX, y, fieldWidth, 18, Component.literal("Macro name"));
-        nameBox.setValue(defaultName);
-        addRenderableWidget(nameBox);
+        nameBox = new TextFieldWidget(textRenderer, fieldX, y, fieldWidth, 18, Text.literal("Macro name"));
+        nameBox.setText(defaultName);
+        addDrawableChild(nameBox);
         y += 28;
 
         addText(labelX, y + 4, 0xFFFFFFFF, "Message");
-        messageBox = new EditBox(font, fieldX, y, fieldWidth, 18, Component.literal("Message to send"));
-        messageBox.setValue(defaultMessage);
+        messageBox = new TextFieldWidget(textRenderer, fieldX, y, fieldWidth, 18, Text.literal("Message to send"));
+        messageBox.setText(defaultMessage);
         messageBox.setMaxLength(256);
-        addRenderableWidget(messageBox);
+        addDrawableChild(messageBox);
         y += 28;
 
         addText(labelX, y + 4, 0xFFFFFFFF, "Key Bind");
@@ -74,14 +73,14 @@ public class MacroEditScreen extends MeridianScreen {
         }
 
         String hint = "Press a key while this screen is open to capture it. Escape cancels.";
-        addText(panelX + 16, panelY + 158, 0xFF5E6878, font.plainSubstrByWidth(hint, panelWidth - 32));
+        addText(panelX + 16, panelY + 158, 0xFF5E6878, textRenderer.trimToWidth(hint, panelWidth - 32));
 
         addButton((width - 240) / 2 - 5, panelY + 176, 116, 20, "Save", () -> save());
         addButton((width - 240) / 2 + 129, panelY + 176, 116, 20, "Cancel", () -> goBack());
     }
 
     private void updateKeyLabel() {
-        keyButton.setMessage(Component.literal(keyLabel()));
+        keyButton.setMessage(Text.literal(keyLabel()));
     }
 
     private String keyLabel() {
@@ -92,23 +91,23 @@ public class MacroEditScreen extends MeridianScreen {
     }
 
     @Override
-    public boolean keyPressed(KeyEvent keyEvent) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (capturing) {
-            if (keyEvent.key() == GLFW.GLFW_KEY_ESCAPE) {
+            if (keyCode == GLFW.GLFW_KEY_ESCAPE) {
                 capturing = false;
             } else {
-                key = keyEvent.key();
+                key = keyCode;
                 capturing = false;
             }
             updateKeyLabel();
             return true;
         }
-        return super.keyPressed(keyEvent);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     private void save() {
-        String name = nameBox.getValue().trim();
-        String message = messageBox.getValue();
+        String name = nameBox.getText().trim();
+        String message = messageBox.getText();
         if (name.isEmpty()) {
             error = "A name is required.";
             clearAndRebuild();

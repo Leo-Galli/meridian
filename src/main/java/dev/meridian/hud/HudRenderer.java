@@ -3,10 +3,12 @@ package dev.meridian.hud;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.DeltaTracker;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import org.joml.Matrix3x2fStack;
+
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.render.RenderTickCounter;
 
 import dev.meridian.config.Config;
 import dev.meridian.config.ModuleRegistry;
@@ -56,26 +58,26 @@ public final class HudRenderer {
         }
     }
 
-    public void render(GuiGraphicsExtractor gfx, Font font, DeltaTracker deltaTracker) {
-        Minecraft mc = Minecraft.getInstance();
+    public void render(DrawContext gfx, TextRenderer font, RenderTickCounter tickCounter) {
+        MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.getWindow() == null) {
             return;
         }
         clickSampler.poll();
-        int screenWidth = gfx.guiWidth();
-        int screenHeight = gfx.guiHeight();
+        int screenWidth = gfx.getScaledWindowWidth();
+        int screenHeight = gfx.getScaledWindowHeight();
         for (HudModule module : modules) {
             if (module.settings.enabled && module.isOverlay()) {
                 module.renderOverlayContent(gfx, font, screenWidth, screenHeight);
             } else if (module.settings.enabled) {
-                drawModule(gfx, font, module, screenWidth, screenHeight, deltaTracker.getRealtimeDeltaTicks());
+                drawModule(gfx, font, module, screenWidth, screenHeight, tickCounter.getDynamicDeltaTicks());
             }
         }
     }
 
-    public void drawAllForLayout(GuiGraphicsExtractor gfx, Font font) {
-        int screenWidth = gfx.guiWidth();
-        int screenHeight = gfx.guiHeight();
+    public void drawAllForLayout(DrawContext gfx, TextRenderer font) {
+        int screenWidth = gfx.getScaledWindowWidth();
+        int screenHeight = gfx.getScaledWindowHeight();
         for (HudModule module : modules) {
             if (module.isOverlay()) {
                 continue;
@@ -89,7 +91,7 @@ public final class HudRenderer {
         }
     }
 
-    private void drawModule(GuiGraphicsExtractor gfx, Font font, HudModule module, int screenWidth, int screenHeight, float deltaTicks) {
+    private void drawModule(DrawContext gfx, TextRenderer font, HudModule module, int screenWidth, int screenHeight, float deltaTicks) {
         ModuleSettings settings = module.settings;
         int contentWidth = module.getWidth(font);
         int contentHeight = module.getHeight(font);
@@ -98,20 +100,21 @@ public final class HudRenderer {
         int boxHeight = Math.round(contentHeight * scale);
         float x = settings.effectiveX(screenWidth, boxWidth);
         float y = settings.effectiveY(screenHeight, boxHeight);
-        gfx.pose().pushMatrix();
-        gfx.pose().translate(x, y);
-        gfx.pose().scale(scale, scale);
+        Matrix3x2fStack pose = gfx.getMatrices();
+        pose.pushMatrix();
+        pose.translate(x, y);
+        pose.scale(scale, scale);
         if (settings.background && settings.backgroundOpacity > 0) {
             gfx.fill(0, 0, contentWidth, contentHeight, settings.backgroundOpacity << 24);
         }
-        gfx.pose().pushMatrix();
-        gfx.pose().translate(module.padding(), module.padding());
+        pose.pushMatrix();
+        pose.translate(module.padding(), module.padding());
         module.renderContent(gfx, font, deltaTicks);
-        gfx.pose().popMatrix();
-        gfx.pose().popMatrix();
+        pose.popMatrix();
+        pose.popMatrix();
     }
 
-    public Box bounds(HudModule module, Font font, int screenWidth, int screenHeight) {
+    public Box bounds(HudModule module, TextRenderer font, int screenWidth, int screenHeight) {
         ModuleSettings settings = module.settings;
         int boxWidth = Math.round(module.getWidth(font) * settings.scale);
         int boxHeight = Math.round(module.getHeight(font) * settings.scale);
@@ -120,7 +123,7 @@ public final class HudRenderer {
         return new Box(x, y, boxWidth, boxHeight);
     }
 
-    public HudModule moduleAt(int x, int y, Font font, int screenWidth, int screenHeight) {
+    public HudModule moduleAt(int x, int y, TextRenderer font, int screenWidth, int screenHeight) {
         for (HudModule module : modules) {
             if (module.isOverlay()) {
                 continue;

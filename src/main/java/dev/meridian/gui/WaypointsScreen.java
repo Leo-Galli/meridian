@@ -2,8 +2,8 @@ package dev.meridian.gui;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 
 import dev.meridian.config.Config;
 import dev.meridian.config.Waypoint;
@@ -68,15 +68,15 @@ public class WaypointsScreen extends MeridianScreen {
         });
         int colorX = x + 24;
         int finalRowY = rowY;
-        addRenderableOnly((gfx, mouseX, mouseY, delta) ->
+        addDrawable((gfx, mouseX, mouseY, delta) ->
                 gfx.fill(colorX, finalRowY + 6, colorX + 8, finalRowY + 14, waypoint.color));
         int textX = colorX + 16;
         String name = waypoint.name == null ? "Waypoint" : waypoint.name;
         int nameMax = Math.max(60, Math.min(200, rowWidth - 330));
-        String clippedName = font.plainSubstrByWidth(name, nameMax);
+        String clippedName = textRenderer.trimToWidth(name, nameMax);
         addText(textX, rowY + 3, waypoint.enabled ? 0xFFFFFFFF : 0xFF6C7686, clippedName);
         String coords = "(" + (int) waypoint.x + ", " + (int) waypoint.y + ", " + (int) waypoint.z + ")";
-        addText(textX + Math.min(font.width(clippedName), nameMax) + 8, rowY + 3, 0xFF7C8494, coords);
+        addText(textX + Math.min(textRenderer.getWidth(clippedName), nameMax) + 8, rowY + 3, 0xFF7C8494, coords);
 
         int right = x + rowWidth;
         int buttonWidth = 54;
@@ -92,7 +92,7 @@ public class WaypointsScreen extends MeridianScreen {
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         int total = Config.INSTANCE.waypoints().size();
-        int panelHeight = Math.min(640, width - 30) > 0 ? height - 42 - 58 : 0;
+        int panelHeight = height - 42 - 58;
         int visible = Math.max(1, (panelHeight - 16) / ROW_HEIGHT);
         int maxScroll = Math.max(0, total - visible);
         if (maxScroll <= 0) {
@@ -108,6 +108,6 @@ public class WaypointsScreen extends MeridianScreen {
     }
 
     private static void open(Screen screen) {
-        Minecraft.getInstance().gui.setScreen(screen);
+        MinecraftClient.getInstance().setScreen(screen);
     }
 }

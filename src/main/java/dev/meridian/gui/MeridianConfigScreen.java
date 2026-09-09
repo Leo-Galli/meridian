@@ -1,11 +1,11 @@
 package dev.meridian.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 
 public class MeridianConfigScreen extends MeridianScreen {
 
-    private static final String VERSION = "1.0.0";
+    private static final String VERSION = "1.1.0";
 
     public MeridianConfigScreen() {
         super("Meridian");
@@ -47,6 +47,6 @@ public class MeridianConfigScreen extends MeridianScreen {
     }
 
     private static void open(Screen screen) {
-        Minecraft.getInstance().gui.setScreen(screen);
+        MinecraftClient.getInstance().setScreen(screen);
     }
 }

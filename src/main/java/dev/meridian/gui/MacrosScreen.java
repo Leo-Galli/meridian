@@ -2,8 +2,8 @@ package dev.meridian.gui;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 
 import dev.meridian.config.Config;
 import dev.meridian.config.Macro;
@@ -66,12 +66,12 @@ public class MacrosScreen extends MeridianScreen {
         int textX = x + 24;
         String name = macro.name == null || macro.name.isEmpty() ? "Macro" : macro.name;
         int nameMax = Math.max(60, Math.min(180, rowWidth - 340));
-        String clippedName = font.plainSubstrByWidth(name, nameMax);
+        String clippedName = textRenderer.trimToWidth(name, nameMax);
         addText(textX, rowY + 3, macro.enabled ? 0xFFFFFFFF : 0xFF6C7686, clippedName);
         String message = macro.message == null ? "" : macro.message;
         int messageMax = Math.max(40, rowWidth - 400);
-        String clippedMessage = font.plainSubstrByWidth(message, messageMax);
-        addText(textX + Math.min(font.width(clippedName), nameMax) + 10, rowY + 3, 0xFF7C8494, clippedMessage);
+        String clippedMessage = textRenderer.trimToWidth(message, messageMax);
+        addText(textX + Math.min(textRenderer.getWidth(clippedName), nameMax) + 10, rowY + 3, 0xFF7C8494, clippedMessage);
         addText(x + rowWidth - 300, rowY + 3, 0xFFB7C2D0, KeyNames.display(macro.key));
 
         int right = x + rowWidth;
@@ -104,6 +104,6 @@ public class MacrosScreen extends MeridianScreen {
     }
 
     private static void open(Screen screen) {
-        Minecraft.getInstance().gui.setScreen(screen);
+        MinecraftClient.getInstance().setScreen(screen);
     }
 }

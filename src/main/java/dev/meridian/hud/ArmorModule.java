@@ -3,12 +3,12 @@ package dev.meridian.hud;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 
 import dev.meridian.config.ModuleSettings;
 
@@ -21,7 +21,7 @@ public class ArmorModule extends HudModule {
     }
 
     @Override
-    protected int contentWidth(Font font) {
+    protected int contentWidth(TextRenderer font) {
         int widest = 0;
         for (Row row : rows()) {
             widest = Math.max(widest, row.nameWidth + row.valueWidth);
@@ -30,13 +30,13 @@ public class ArmorModule extends HudModule {
     }
 
     @Override
-    protected int contentHeight(Font font) {
+    protected int contentHeight(TextRenderer font) {
         int count = rows().size();
-        return count == 0 ? font.lineHeight : count * (font.lineHeight + 6);
+        return count == 0 ? font.fontHeight : count * (font.fontHeight + 6);
     }
 
     @Override
-    protected void renderContent(GuiGraphicsExtractor gfx, Font font, float deltaTicks) {
+    protected void renderContent(DrawContext gfx, TextRenderer font, float deltaTicks) {
         List<Row> rows = rows();
         if (rows.isEmpty()) {
             drawText(gfx, font, "No Armor", 0, 0, settings.textColor);
@@ -47,34 +47,34 @@ public class ArmorModule extends HudModule {
             drawText(gfx, font, row.name, 0, y, settings.textColor);
             drawText(gfx, font, row.value, row.nameWidth, y, settings.accentColor);
             if (row.bar) {
-                drawBar(gfx, 0, y + font.lineHeight + 2, row.nameWidth + row.valueWidth, 2, row.fraction, settings.accentColor);
+                drawBar(gfx, 0, y + font.fontHeight + 2, row.nameWidth + row.valueWidth, 2, row.fraction, settings.accentColor);
             }
-            y += font.lineHeight + 6;
+            y += font.fontHeight + 6;
         }
     }
 
     private List<Row> rows() {
         List<Row> list = new ArrayList<>();
-        Minecraft mc = Minecraft.getInstance();
-        Font font = mc.gui.hud.getFont();
-        Player player = mc.player;
+        MinecraftClient mc = MinecraftClient.getInstance();
+        TextRenderer font = mc.textRenderer;
+        PlayerEntity player = mc.player;
         if (player == null) {
             return list;
         }
         for (EquipmentSlot slot : SLOTS) {
-            ItemStack stack = player.getItemBySlot(slot);
+            ItemStack stack = player.getEquippedStack(slot);
             if (stack.isEmpty()) {
                 continue;
             }
             Row row = new Row();
-            row.name = stack.getHoverName().getString();
-            row.nameWidth = font.width(row.name);
-            if (stack.isDamageableItem()) {
+            row.name = stack.getName().getString();
+            row.nameWidth = font.getWidth(row.name);
+            if (stack.isDamageable()) {
                 int max = stack.getMaxDamage();
-                int damage = stack.getDamageValue();
+                int damage = stack.getDamage();
                 int current = Math.max(0, max - damage);
                 row.value = "  " + current + "/" + max;
-                row.valueWidth = font.width(row.value);
+                row.valueWidth = font.getWidth(row.value);
                 row.fraction = max <= 0 ? 1f : (float) current / max;
                 row.bar = true;
             } else {

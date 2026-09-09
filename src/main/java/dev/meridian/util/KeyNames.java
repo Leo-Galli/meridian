@@ -1,6 +1,6 @@
 package dev.meridian.util;
 
-import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.util.InputUtil;
 
 public final class KeyNames {
 
@@ -12,8 +12,8 @@ public final class KeyNames {
             return "Unbound";
         }
         try {
-            InputConstants.Key key = InputConstants.Type.KEYSYM.getOrCreate(glfwCode);
-            String name = key.getDisplayName().getString();
+            InputUtil.Key key = InputUtil.Type.KEYSYM.createFromCode(glfwCode);
+            String name = key.getLocalizedText().getString();
             if (name != null && !name.isBlank() && !name.startsWith("key.keyboard")) {
                 return name;
             }
