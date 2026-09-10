@@ -15,9 +15,11 @@ A modern client-side HUD suite for Minecraft 1.21.8 (Fabric). Meridian brings an
 - **RAM Usage** - dynamic memory consumption with usage bar and percentage.
 - **Server Info** - name and address of the server you are connected to.
 - **Waypoints** - save, manage and render custom waypoints in the world, colored and fully editable.
-- **AutoText Macros** - bind preset chat messages to keys and send them instantly while in game.
+- **AutoText Macros** - a dedicated manager with per-macro enable toggles; bind preset chat messages to keys and send them instantly while in game.
+- **Player Nametags** - player names with health bars rendered above heads, visible through walls, fully toggleable.
+- **Combo Counter** - counts consecutive hits landed without taking damage.
 - **Backup & Transfer** - export your settings, waypoints, macros and menu key to `meridian-transfer.json` and import them on another computer.
-- **FPS counter**, **Armor Status** with durability bars and a **Direction Compass**.
+- **FPS counter**, **Armor Status** with item icons and durability bars, and a **Direction Compass**.
 
 Every module is fully customizable: toggle it independently, rescale it, recolor text and accents, set background opacity and text shadow, fine-tune its X/Y position in pixel steps, reset a single module or everything at once, and reposition it by dragging in the built-in HUD Layout Editor.
 

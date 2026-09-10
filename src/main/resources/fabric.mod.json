@@ -22,6 +22,9 @@
       "dev.meridian.compat.ModMenuCompat"
     ]
   },
+  "mixins": [
+    "meridian.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.16.13",
     "minecraft": ">=1.21.8 <1.21.9-",

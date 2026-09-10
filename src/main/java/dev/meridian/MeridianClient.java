@@ -4,13 +4,16 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 
 import dev.meridian.config.Config;
 import dev.meridian.gui.MeridianConfigScreen;
+import dev.meridian.hud.ComboModule;
 import dev.meridian.hud.HudRenderer;
 import dev.meridian.hud.MacroEngine;
+import dev.meridian.hud.NametagsModule;
 
 public class MeridianClient implements ClientModInitializer {
 
@@ -29,11 +32,14 @@ public class MeridianClient implements ClientModInitializer {
             HudRenderer.INSTANCE.render(drawContext, mc.textRenderer, tickCounter);
         });
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndTick);
+        WorldRenderEvents.LAST.register(context ->
+                NametagsModule.renderWorld(context.consumers(), context.camera()));
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> Config.INSTANCE.save());
     }
 
     private void onEndTick(MinecraftClient client) {
         MacroEngine.INSTANCE.tick(client);
+        ComboModule.update();
         int code = Config.INSTANCE.menuKeyCode;
         if (code > 0 && client.getWindow() != null && client.currentScreen == null) {
             boolean down = InputUtil.isKeyPressed(client.getWindow().getHandle(), code);

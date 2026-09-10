@@ -45,14 +45,16 @@ const modules = [
   { n: "06", name: "Waypoints", desc: "Custom in-world markers with colors, icons and distance" },
   { n: "07", name: "AutoText Macros", desc: "Keybound quick-chat messages and commands" },
   { n: "08", name: "FPS Counter", desc: "Frames per second, always on screen" },
-  { n: "09", name: "Armor Status", desc: "Equipped armor with live durability bars" },
+  { n: "09", name: "Armor Status", desc: "Equipped armor icons with live durability bars" },
   { n: "10", name: "Direction Compass", desc: "16-wind compass with a sliding bearing strip" },
+  { n: "11", name: "Combo Counter", desc: "Consecutive hits landed without taking damage" },
+  { n: "12", name: "Player Nametags", desc: "Names and health bars rendered above players" },
 ];
 
 const steps = [
   { title: "Install Fabric", desc: "Run the Fabric installer for Minecraft 1.21.8 and pick the client option." },
   { title: "Drop in the jars", desc: "Place both <code>fabric-api</code> and <code>meridian.jar</code> in your <code>mods</code> folder." },
-  { title: "Press Page Up", desc: "Launch the game and open the Meridian menu with <b>Page Up</b> - or rebind it in Controls." },
+  { title: "Press Page Up", desc: "Launch the game and open the Meridian menu with <b>Page Up</b> - or change the key from inside the menu itself." },
   { title: "Make it yours", desc: "Toggle modules, drag them around in the HUD Layout Editor and save waypoints." },
 ];
 
@@ -74,7 +76,7 @@ const icons = {
     <title>Meridian - Client HUD Suite for Minecraft 1.21.8</title>
     <meta
       name="description"
-      content="Meridian is a modern client-side HUD suite for Minecraft 1.21.8: keystrokes, CPS, ping, RAM, server info, waypoints, macros, armor status and a direction compass - all fully customizable."
+      content="Meridian is a modern client-side HUD suite for Minecraft 1.21.8: keystrokes, CPS, ping, RAM, server info, waypoints, macros, armor status, compass, combo counter and player nametags - all fully customizable."
     />
     <meta name="theme-color" content="#04070d" />
     <meta property="og:title" content="Meridian - Client HUD Suite for Minecraft" />
@@ -122,7 +124,7 @@ const icons = {
           </a>
         </div>
         <div class="hero-stats">
-          <div class="stat"><div class="num">10</div><div class="lbl">Modules</div></div>
+          <div class="stat"><div class="num">12</div><div class="lbl">Modules</div></div>
           <div class="stat"><div class="num">100%</div><div class="lbl">English</div></div>
           <div class="stat"><div class="num">1.21.8</div><div class="lbl">Minecraft</div></div>
           <div class="stat"><div class="num">MIT</div><div class="lbl">Open source</div></div>
@@ -148,6 +150,14 @@ const icons = {
               <div class="mouse-keys">
                 <span class="mouse-key">LMB</span>
                 <span class="mouse-key right">RMB</span>
+              </div>
+              <div class="combo">
+                <span class="combo-label">Combo</span>
+                <span class="combo-value">8</span>
+              </div>
+              <div class="nametag">
+                <span class="nametag-name">Steve_</span>
+                <div class="nametag-bar"><div class="nametag-fill"></div></div>
               </div>
               <div class="cps">
                 <div class="cps-row">
@@ -198,7 +208,7 @@ const icons = {
         <div class="container">
           <div class="section-head reveal">
             <span class="eyebrow">Modules</span>
-            <h2>Ten modules. <span class="gradient-text">All included.</span></h2>
+            <h2>Twelve modules. <span class="gradient-text">All included.</span></h2>
             <p>Every module is toggleable, rescalable, recolored and repositionable on the fly.</p>
           </div>
           <div class="modules-panel reveal">

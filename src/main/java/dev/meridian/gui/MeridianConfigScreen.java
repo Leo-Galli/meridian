@@ -14,7 +14,7 @@ import dev.meridian.util.KeyNames;
 
 public class MeridianConfigScreen extends MeridianScreen {
 
-    private static final String VERSION = "1.4.0";
+    private static final String VERSION = "1.5.0";
     private static final String WEBSITE = "https://meridian-mod.vercel.app/";
 
     private MeridianButton menuKeyButton;

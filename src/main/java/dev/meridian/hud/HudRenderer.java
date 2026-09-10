@@ -49,8 +49,14 @@ public final class HudRenderer {
                 case ModuleRegistry.ARMOR:
                     modules.add(new ArmorModule(settings));
                     break;
+                case ModuleRegistry.COMBO:
+                    modules.add(new ComboModule(settings));
+                    break;
                 case ModuleRegistry.WAYPOINTS:
                     modules.add(new WaypointsModule(settings));
+                    break;
+                case ModuleRegistry.NAMETAGS:
+                    modules.add(new NametagsModule(settings));
                     break;
                 default:
                     break;

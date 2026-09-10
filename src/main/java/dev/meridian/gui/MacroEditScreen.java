@@ -18,6 +18,7 @@ public class MacroEditScreen extends MeridianScreen {
     private TextFieldWidget messageBox;
     private ButtonWidget keyButton;
     private int key;
+    private boolean enabled = true;
     private boolean capturing;
     private String error;
 
@@ -37,11 +38,12 @@ public class MacroEditScreen extends MeridianScreen {
         String defaultName = existing != null ? existing.name : "";
         String defaultMessage = existing != null ? existing.message : "";
         key = existing != null ? existing.key : 0;
+        enabled = existing == null || existing.enabled;
 
         int panelWidth = Math.min(480, width - 30);
         int panelX = (width - panelWidth) / 2;
         int panelY = 42;
-        addPanel(panelX, panelY, panelWidth, 150);
+        addPanel(panelX, panelY, panelWidth, 186);
 
         int labelX = panelX + 16;
         int fieldX = panelX + 130;
@@ -68,15 +70,19 @@ public class MacroEditScreen extends MeridianScreen {
         });
         y += 28;
 
+        addCheckbox(fieldX, y, "Enabled", enabled, (checkbox, value) -> enabled = value);
+        addText(labelX, y + 4, 0xFFFFFFFF, "Active");
+        y += 28;
+
         if (error != null) {
             addText(panelX + 16, y + 4, 0xFFFF6B6B, error);
         }
 
-        String hint = "Press a key while this screen is open to capture it. Escape cancels.";
-        addText(panelX + 16, panelY + 158, 0xFF5E6878, textRenderer.trimToWidth(hint, panelWidth - 32));
+        String hint = "Click Key Bind and press a key to capture it. Escape cancels.";
+        addText(panelX + 16, panelY + 192, 0xFF5E6878, textRenderer.trimToWidth(hint, panelWidth - 32));
 
-        addButton((width - 240) / 2 - 5, panelY + 176, 116, 20, "Save", () -> save());
-        addButton((width - 240) / 2 + 129, panelY + 176, 116, 20, "Cancel", () -> goBack());
+        addButton((width - 240) / 2 - 5, height - 26, 116, 20, "Save", () -> save());
+        addButton((width - 240) / 2 + 129, height - 26, 116, 20, "Cancel", () -> goBack());
     }
 
     private void updateKeyLabel() {
@@ -105,6 +111,14 @@ public class MacroEditScreen extends MeridianScreen {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (capturing) {
+            return true;
+        }
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
     private void save() {
         String name = nameBox.getText().trim();
         String message = messageBox.getText();
@@ -128,8 +142,9 @@ public class MacroEditScreen extends MeridianScreen {
             macro.name = name;
             macro.message = message;
             macro.key = key;
+            macro.enabled = enabled;
         } else {
-            Config.INSTANCE.macros().add(new Macro(name, message, key, true));
+            Config.INSTANCE.macros().add(new Macro(name, message, key, enabled));
         }
         Config.INSTANCE.save();
         goBack();

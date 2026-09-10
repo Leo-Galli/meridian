@@ -14,7 +14,9 @@ public final class ModuleRegistry {
     public static final String SERVER_INFO = "server_info";
     public static final String DIRECTION = "direction";
     public static final String ARMOR = "armor";
+    public static final String COMBO = "combo";
     public static final String WAYPOINTS = "waypoints";
+    public static final String NAMETAGS = "nametags";
 
     public static final List<String> ORDER = Arrays.asList(
             KEYSTROKES,
@@ -25,7 +27,9 @@ public final class ModuleRegistry {
             SERVER_INFO,
             DIRECTION,
             ARMOR,
-            WAYPOINTS
+            COMBO,
+            WAYPOINTS,
+            NAMETAGS
     );
 
     private static final int WHITE = 0xFFFFFFFF;
@@ -60,8 +64,12 @@ public final class ModuleRegistry {
                 return new ModuleSettings(id, true, 2, 52, 1.0f, WHITE, 0xFFFFE08A, true, 110, true);
             case ARMOR:
                 return new ModuleSettings(id, true, -160, -96, 1.0f, WHITE, 0xFFB7FFC9, true, 110, true);
+            case COMBO:
+                return new ModuleSettings(id, true, 2, 78, 1.0f, WHITE, 0xFFFF8AB5, true, 110, true);
             case WAYPOINTS:
                 return new ModuleSettings(id, true, 0, 0, 1.0f, WHITE, 0xFFFFD75E, false, 0, true);
+            case NAMETAGS:
+                return new ModuleSettings(id, true, 0, 0, 1.0f, WHITE, 0xFF58E8FF, false, 0, true);
             default:
                 return new ModuleSettings(id, true, 2, 2, 1.0f, WHITE, LIGHT_GRAY, true, 110, true);
         }
@@ -85,8 +93,12 @@ public final class ModuleRegistry {
                 return "Direction Compass";
             case ARMOR:
                 return "Armor Status";
+            case COMBO:
+                return "Combo Counter";
             case WAYPOINTS:
                 return "Waypoint Markers";
+            case NAMETAGS:
+                return "Player Nametags";
             default:
                 return id;
         }
@@ -110,8 +122,12 @@ public final class ModuleRegistry {
                 return "Shows your heading with a live compass strip.";
             case ARMOR:
                 return "Shows equipped armor with durability bars.";
+            case COMBO:
+                return "Counts consecutive hits landed without taking damage.";
             case WAYPOINTS:
                 return "Renders saved waypoint markers in the world.";
+            case NAMETAGS:
+                return "Shows player names and health bars above their heads.";
             default:
                 return "";
         }
