@@ -48,7 +48,10 @@ const modules = [
   { n: "09", name: "Armor Status", desc: "Equipped armor icons with live durability bars" },
   { n: "10", name: "Direction Compass", desc: "16-wind compass with a sliding bearing strip" },
   { n: "11", name: "Combo Counter", desc: "Consecutive hits landed without taking damage" },
-  { n: "12", name: "Player Nametags", desc: "Names and health bars rendered above players" },
+  { n: "12", name: "Coordinates", desc: "Position, facing direction and biome at a glance" },
+  { n: "13", name: "Speedometer", desc: "Current horizontal speed in m/s and km/h" },
+  { n: "14", name: "Potion Effects", desc: "Active effects with icons and remaining time" },
+  { n: "15", name: "Sound Indicator", desc: "Expanding rings around nearby sounds and footsteps" },
 ];
 
 const steps = [
@@ -76,7 +79,7 @@ const icons = {
     <title>Meridian - Client HUD Suite for Minecraft 1.21.8</title>
     <meta
       name="description"
-      content="Meridian is a modern client-side HUD suite for Minecraft 1.21.8: keystrokes, CPS, ping, RAM, server info, waypoints, macros, armor status, compass, combo counter and player nametags - all fully customizable."
+      content="Meridian is a modern client-side HUD suite for Minecraft 1.21.8: keystrokes, CPS, ping, RAM, server info, waypoints, macros, armor status, compass, combo counter, coordinates, speedometer, potion effects and a sound indicator - all fully customizable."
     />
     <meta name="theme-color" content="#04070d" />
     <meta property="og:title" content="Meridian - Client HUD Suite for Minecraft" />
@@ -124,7 +127,7 @@ const icons = {
           </a>
         </div>
         <div class="hero-stats">
-          <div class="stat"><div class="num">12</div><div class="lbl">Modules</div></div>
+          <div class="stat"><div class="num">15</div><div class="lbl">Modules</div></div>
           <div class="stat"><div class="num">100%</div><div class="lbl">English</div></div>
           <div class="stat"><div class="num">1.21.8</div><div class="lbl">Minecraft</div></div>
           <div class="stat"><div class="num">MIT</div><div class="lbl">Open source</div></div>
@@ -155,10 +158,7 @@ const icons = {
                 <span class="combo-label">Combo</span>
                 <span class="combo-value">8</span>
               </div>
-              <div class="nametag">
-                <span class="nametag-name">Steve_</span>
-                <div class="nametag-bar"><div class="nametag-fill"></div></div>
-              </div>
+              <div class="sound-ring"></div>
               <div class="cps">
                 <div class="cps-row">
                   <span class="cps-label">CPS</span>
@@ -208,7 +208,7 @@ const icons = {
         <div class="container">
           <div class="section-head reveal">
             <span class="eyebrow">Modules</span>
-            <h2>Twelve modules. <span class="gradient-text">All included.</span></h2>
+            <h2>Fifteen modules. <span class="gradient-text">All included.</span></h2>
             <p>Every module is toggleable, rescalable, recolored and repositionable on the fly.</p>
           </div>
           <div class="modules-panel reveal">

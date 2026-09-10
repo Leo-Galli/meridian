@@ -15,8 +15,11 @@ public final class ModuleRegistry {
     public static final String DIRECTION = "direction";
     public static final String ARMOR = "armor";
     public static final String COMBO = "combo";
+    public static final String COORDINATES = "coordinates";
+    public static final String SPEEDOMETER = "speedometer";
+    public static final String POTION_EFFECTS = "potion_effects";
     public static final String WAYPOINTS = "waypoints";
-    public static final String NAMETAGS = "nametags";
+    public static final String SOUND_INDICATOR = "sound_indicator";
 
     public static final List<String> ORDER = Arrays.asList(
             KEYSTROKES,
@@ -28,8 +31,11 @@ public final class ModuleRegistry {
             DIRECTION,
             ARMOR,
             COMBO,
+            COORDINATES,
+            SPEEDOMETER,
+            POTION_EFFECTS,
             WAYPOINTS,
-            NAMETAGS
+            SOUND_INDICATOR
     );
 
     private static final int WHITE = 0xFFFFFFFF;
@@ -66,9 +72,15 @@ public final class ModuleRegistry {
                 return new ModuleSettings(id, true, -160, -96, 1.0f, WHITE, 0xFFB7FFC9, true, 110, true);
             case COMBO:
                 return new ModuleSettings(id, true, 2, 78, 1.0f, WHITE, 0xFFFF8AB5, true, 110, true);
+            case COORDINATES:
+                return new ModuleSettings(id, true, 2, 96, 1.0f, WHITE, 0xFF8AE8FF, true, 110, true);
+            case SPEEDOMETER:
+                return new ModuleSettings(id, true, -130, 50, 1.0f, WHITE, 0xFF58E8FF, true, 110, true);
+            case POTION_EFFECTS:
+                return new ModuleSettings(id, true, -120, 76, 1.0f, WHITE, 0xFFB7FF7C, true, 110, true);
             case WAYPOINTS:
                 return new ModuleSettings(id, true, 0, 0, 1.0f, WHITE, 0xFFFFD75E, false, 0, true);
-            case NAMETAGS:
+            case SOUND_INDICATOR:
                 return new ModuleSettings(id, true, 0, 0, 1.0f, WHITE, 0xFF58E8FF, false, 0, true);
             default:
                 return new ModuleSettings(id, true, 2, 2, 1.0f, WHITE, LIGHT_GRAY, true, 110, true);
@@ -95,10 +107,16 @@ public final class ModuleRegistry {
                 return "Armor Status";
             case COMBO:
                 return "Combo Counter";
+            case COORDINATES:
+                return "Coordinates";
+            case SPEEDOMETER:
+                return "Speedometer";
+            case POTION_EFFECTS:
+                return "Potion Effects";
             case WAYPOINTS:
                 return "Waypoint Markers";
-            case NAMETAGS:
-                return "Player Nametags";
+            case SOUND_INDICATOR:
+                return "Sound Indicator";
             default:
                 return id;
         }
@@ -124,10 +142,16 @@ public final class ModuleRegistry {
                 return "Shows equipped armor with durability bars.";
             case COMBO:
                 return "Counts consecutive hits landed without taking damage.";
+            case COORDINATES:
+                return "Shows your position, facing direction and biome.";
+            case SPEEDOMETER:
+                return "Shows your current horizontal speed.";
+            case POTION_EFFECTS:
+                return "Shows active effects with icons and remaining time.";
             case WAYPOINTS:
                 return "Renders saved waypoint markers in the world.";
-            case NAMETAGS:
-                return "Shows player names and health bars above their heads.";
+            case SOUND_INDICATOR:
+                return "Draws expanding rings at nearby sound sources.";
             default:
                 return "";
         }

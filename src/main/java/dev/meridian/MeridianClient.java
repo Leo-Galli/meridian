@@ -13,7 +13,7 @@ import dev.meridian.gui.MeridianConfigScreen;
 import dev.meridian.hud.ComboModule;
 import dev.meridian.hud.HudRenderer;
 import dev.meridian.hud.MacroEngine;
-import dev.meridian.hud.NametagsModule;
+import dev.meridian.hud.SoundIndicatorModule;
 
 public class MeridianClient implements ClientModInitializer {
 
@@ -33,7 +33,7 @@ public class MeridianClient implements ClientModInitializer {
         });
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndTick);
         WorldRenderEvents.LAST.register(context ->
-                NametagsModule.renderWorld(context.consumers(), context.camera()));
+                SoundIndicatorModule.renderWorld(context.consumers(), context.matrixStack()));
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> Config.INSTANCE.save());
     }
 

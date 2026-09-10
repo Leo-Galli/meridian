@@ -552,49 +552,26 @@ h3 {
   }
 }
 
-.nametag {
+.sound-ring {
   position: absolute;
-  top: 150px;
-  right: 18px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 14px;
-  border-radius: 12px;
-  background: rgba(7, 13, 24, 0.9);
-  border: 1px solid rgba(88, 232, 255, 0.4);
-  box-shadow: 0 14px 34px -16px rgba(0, 0, 0, 0.8);
+  left: 18px;
+  bottom: 18px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba(124, 255, 138, 0.75);
+  box-shadow: 0 0 16px rgba(124, 255, 138, 0.55);
+  animation: soundRing 1.5s ease-out infinite;
 }
 
-.nametag-name {
-  font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.nametag-bar {
-  width: 52px;
-  height: 5px;
-  border-radius: 999px;
-  background: rgba(120, 200, 255, 0.12);
-  overflow: hidden;
-}
-
-.nametag-fill {
-  height: 100%;
-  width: 72%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #2fbf61, #55ff9b);
-  animation: nametagPulse 2s ease-in-out infinite;
-}
-
-@keyframes nametagPulse {
-  0%,
-  100% {
-    width: 66%;
+@keyframes soundRing {
+  0% {
+    transform: scale(0.45);
+    opacity: 0.9;
   }
-  50% {
-    width: 84%;
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
   }
 }
 
@@ -1128,7 +1105,7 @@ h3 {
   .waypoint-tag,
   .cps,
   .combo,
-  .nametag {
+  .sound-ring {
     display: none;
   }
 

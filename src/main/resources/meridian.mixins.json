@@ -3,7 +3,8 @@
   "package": "dev.meridian.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ClientPlayerInteractionManagerMixin"
+    "ClientPlayerInteractionManagerMixin",
+    "SoundSystemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

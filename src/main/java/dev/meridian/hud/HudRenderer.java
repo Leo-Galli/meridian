@@ -52,11 +52,20 @@ public final class HudRenderer {
                 case ModuleRegistry.COMBO:
                     modules.add(new ComboModule(settings));
                     break;
+                case ModuleRegistry.COORDINATES:
+                    modules.add(new CoordinatesModule(settings));
+                    break;
+                case ModuleRegistry.SPEEDOMETER:
+                    modules.add(new SpeedometerModule(settings));
+                    break;
+                case ModuleRegistry.POTION_EFFECTS:
+                    modules.add(new PotionEffectsModule(settings));
+                    break;
                 case ModuleRegistry.WAYPOINTS:
                     modules.add(new WaypointsModule(settings));
                     break;
-                case ModuleRegistry.NAMETAGS:
-                    modules.add(new NametagsModule(settings));
+                case ModuleRegistry.SOUND_INDICATOR:
+                    modules.add(new SoundIndicatorModule(settings));
                     break;
                 default:
                     break;

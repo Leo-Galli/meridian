@@ -36,7 +36,7 @@ public class DirectionModule extends HudModule {
     @Override
     protected void renderContent(DrawContext gfx, TextRenderer font, float deltaTicks) {
         int heading = heading();
-        String name = WINDS[Math.floorMod(Math.round(heading / 22.5f), 16)];
+        String name = windName(heading);
         drawText(gfx, font, "Direction  ", 0, 0, settings.textColor);
         drawText(gfx, font, name + "  " + heading + "°", font.getWidth("Direction  "), 0, settings.accentColor);
         drawStrip(gfx, font, heading);
@@ -59,6 +59,10 @@ public class DirectionModule extends HudModule {
             int color = primary ? settings.accentColor : settings.textColor;
             drawText(gfx, font, STRIP[i], x - font.getWidth(STRIP[i]) / 2, y + 1, color);
         }
+    }
+
+    public static String windName(int heading) {
+        return WINDS[Math.floorMod(Math.round(heading / 22.5f), 16)];
     }
 
     public static int heading() {
