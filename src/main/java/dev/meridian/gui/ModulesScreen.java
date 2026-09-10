@@ -41,6 +41,22 @@ public class ModulesScreen extends MeridianScreen {
         }
         int hintY = panelY + panelHeight - 14;
         addText(panelX + 10, hintY - 8, 0xFF6C7686, "Drag modules in the HUD Layout Editor to reposition them.");
+        addButton(panelX + 10, height - 26, 130, 20, "Reset All Modules", () -> {
+            for (ModuleSettings s : Config.INSTANCE.modules().values()) {
+                ModuleSettings d = ModuleRegistry.defaultsFor(s.id);
+                s.enabled = d.enabled;
+                s.x = d.x;
+                s.y = d.y;
+                s.scale = d.scale;
+                s.textColor = d.textColor;
+                s.accentColor = d.accentColor;
+                s.background = d.background;
+                s.backgroundOpacity = d.backgroundOpacity;
+                s.textShadow = d.textShadow;
+            }
+            Config.INSTANCE.save();
+            clearAndRebuild();
+        });
         addButton((width - 160) / 2, height - 26, 160, 20, "HUD Layout Editor", () -> open(new LayoutScreen(this)));
     }
 

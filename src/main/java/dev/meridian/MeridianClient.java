@@ -3,13 +3,9 @@ package dev.meridian;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-
-import org.lwjgl.glfw.GLFW;
 
 import dev.meridian.config.Config;
 import dev.meridian.gui.MeridianConfigScreen;
@@ -20,12 +16,7 @@ public class MeridianClient implements ClientModInitializer {
 
     public static final String MOD_ID = "meridian";
 
-    private static final KeyBinding OPEN_MENU = new KeyBinding(
-            "key.meridian.openMenu",
-            InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_PAGE_UP,
-            KeyBinding.MISC_CATEGORY
-    );
+    private boolean menuKeyDown;
 
     @Override
     public void onInitializeClient() {
@@ -37,15 +28,22 @@ public class MeridianClient implements ClientModInitializer {
             }
             HudRenderer.INSTANCE.render(drawContext, mc.textRenderer, tickCounter);
         });
-        KeyBindingHelper.registerKeyBinding(OPEN_MENU);
         ClientTickEvents.END_CLIENT_TICK.register(this::onEndTick);
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> Config.INSTANCE.save());
     }
 
     private void onEndTick(MinecraftClient client) {
         MacroEngine.INSTANCE.tick(client);
-        while (OPEN_MENU.wasPressed()) {
-            openMenu(client);
+        int code = Config.INSTANCE.menuKeyCode;
+        if (code > 0 && client.getWindow() != null && client.currentScreen == null) {
+            boolean down = InputUtil.isKeyPressed(client.getWindow().getHandle(), code);
+            if (down && !menuKeyDown) {
+                menuKeyDown = true;
+                openMenu(client);
+            }
+            menuKeyDown = down;
+        } else {
+            menuKeyDown = false;
         }
     }
 

@@ -7,11 +7,19 @@
   "authors": [
     "Leo Galli"
   ],
+  "contact": {
+    "homepage": "https://meridian-mod.vercel.app/",
+    "issues": "https://github.com/Leo-Galli/meridian/issues",
+    "sources": "https://github.com/Leo-Galli/meridian"
+  },
   "license": "MIT",
   "environment": "client",
   "entrypoints": {
     "client": [
       "dev.meridian.MeridianClient"
+    ],
+    "modmenu": [
+      "dev.meridian.compat.ModMenuCompat"
     ]
   },
   "depends": {
@@ -19,5 +27,8 @@
     "minecraft": ">=1.21.8 <1.21.9-",
     "java": ">=21",
     "fabric-api": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
   }
 }

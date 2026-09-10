@@ -18,6 +18,8 @@ public final class Config {
 
     public static final Config INSTANCE = new Config();
 
+    public static final int DEFAULT_MENU_KEY = 266;
+
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     private final Path file = FabricLoader.getInstance().getConfigDir().resolve("meridian.json");
@@ -25,6 +27,8 @@ public final class Config {
     private final Map<String, ModuleSettings> modules = new LinkedHashMap<>();
     private final List<Waypoint> waypoints = new ArrayList<>();
     private final List<Macro> macros = new ArrayList<>();
+
+    public int menuKeyCode = DEFAULT_MENU_KEY;
 
     private Config() {
     }
@@ -46,6 +50,9 @@ public final class Config {
                     }
                     if (data.macros != null) {
                         macros.addAll(data.macros);
+                    }
+                    if (data.menuKeyCode != null && data.menuKeyCode > 0) {
+                        menuKeyCode = data.menuKeyCode;
                     }
                 }
             } catch (Exception e) {
@@ -71,6 +78,7 @@ public final class Config {
             data.modules = modules;
             data.waypoints = waypoints;
             data.macros = macros;
+            data.menuKeyCode = menuKeyCode;
             Files.writeString(target, GSON.toJson(data), StandardCharsets.UTF_8);
         } catch (IOException ignored) {
         }
@@ -98,6 +106,9 @@ public final class Config {
             if (data.macros != null) {
                 macros.addAll(data.macros);
             }
+            if (data.menuKeyCode != null && data.menuKeyCode > 0) {
+                menuKeyCode = data.menuKeyCode;
+            }
             for (ModuleSettings fallback : ModuleRegistry.defaults()) {
                 modules.putIfAbsent(fallback.id, fallback);
             }
@@ -112,6 +123,7 @@ public final class Config {
         modules.clear();
         waypoints.clear();
         macros.clear();
+        menuKeyCode = DEFAULT_MENU_KEY;
         for (ModuleSettings fallback : ModuleRegistry.defaults()) {
             modules.put(fallback.id, fallback);
         }
@@ -144,5 +156,6 @@ public final class Config {
         Map<String, ModuleSettings> modules;
         List<Waypoint> waypoints;
         List<Macro> macros;
+        Integer menuKeyCode;
     }
 }

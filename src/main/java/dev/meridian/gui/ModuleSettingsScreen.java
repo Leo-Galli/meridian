@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.function.IntConsumer;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.tooltip.Tooltip;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 
 import dev.meridian.config.Config;
@@ -38,14 +38,14 @@ public class ModuleSettingsScreen extends MeridianScreen {
         int panelWidth = Math.min(460, width - 30);
         int panelX = (width - panelWidth) / 2;
         int panelY = 42;
-        int panelHeight = Math.min(300, height - panelY - 34);
+        int panelHeight = Math.min(348, height - panelY - 34);
         addPanel(panelX, panelY, panelWidth, panelHeight);
 
         int leftX = panelX + 16;
         int controlX = panelX + panelWidth - 224;
         int controlWidth = 208;
         int y = panelY + 12;
-        int rowH = 27;
+        int rowH = 26;
 
         addCheckbox(controlX, y, "Enabled", settings.enabled, (checkbox, value) -> {
             settings.enabled = value;
@@ -60,6 +60,7 @@ public class ModuleSettingsScreen extends MeridianScreen {
                     Config.INSTANCE.save();
                     button.setMessage(Text.literal("Scale: " + percent(settings.scale)));
                 });
+        scale.setTooltip(Tooltip.of(Text.literal("Multiplier applied to every drawn element")));
         addDrawableChild(scale);
         addText(leftX, y + 2, 0xFFFFFFFF, "Text scale");
         y += rowH;
@@ -115,16 +116,48 @@ public class ModuleSettingsScreen extends MeridianScreen {
         addText(leftX, y + 2, 0xFFFFFFFF, "Accent color");
         y += rowH;
 
-        addButton(controlX, y, controlWidth, 20, "Reset Position", () -> {
+        addText(leftX, y + 2, 0xFFFFFFFF, "X position");
+        addNudgeRow(controlX, y, true, settings);
+        y += rowH;
+
+        addText(leftX, y + 2, 0xFFFFFFFF, "Y position");
+        addNudgeRow(controlX, y, false, settings);
+        y += rowH;
+
+        addButton(controlX, y, controlWidth, 20, "Reset Module Settings", () -> {
             ModuleSettings fallback = ModuleRegistry.defaultsFor(moduleId);
             settings.x = fallback.x;
             settings.y = fallback.y;
+            settings.scale = fallback.scale;
+            settings.textColor = fallback.textColor;
+            settings.accentColor = fallback.accentColor;
+            settings.background = fallback.background;
+            settings.backgroundOpacity = fallback.backgroundOpacity;
+            settings.textShadow = fallback.textShadow;
             Config.INSTANCE.save();
+            clearAndRebuild();
         });
-        addText(leftX, y + 2, 0xFFFFFFFF, "Reset HUD position");
-        addText(panelX + 16, panelY + panelHeight - 20, 0xFF5E6878, "Move and scale modules live from the HUD Layout Editor.");
+        addText(leftX, y + 2, 0xFFFFFFFF, "Restore defaults for this module");
+        addText(panelX + 16, panelY + panelHeight - 18, 0xFF5E6878, "Move and scale modules live from the HUD Layout Editor.");
 
         addButton((width - 120) / 2, height - 26, 120, 20, "Done", () -> goBack());
+    }
+
+    private void addNudgeRow(int controlX, int y, boolean horizontal, ModuleSettings settings) {
+        int[] steps = {-10, -1, 1, 10};
+        int bw = 48;
+        int gap = 4;
+        for (int i = 0; i < steps.length; i++) {
+            int step = steps[i];
+            addButton(controlX + i * (bw + gap), y, bw, 20, (step > 0 ? "+" : "") + step, () -> {
+                if (horizontal) {
+                    settings.x = Math.max(-width, Math.min(width, settings.x + step));
+                } else {
+                    settings.y = Math.max(-height, Math.min(height, settings.y + step));
+                }
+                Config.INSTANCE.save();
+            });
+        }
     }
 
     private void openColorPicker(String title, int color, IntConsumer onChange) {
